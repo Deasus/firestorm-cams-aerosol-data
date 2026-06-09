@@ -61,13 +61,16 @@ SPECIES = [
 ]
 
 # AOD floor — below this, the species is "essentially zero" and the cell can
-# be dropped. 0.01 ≈ 1% optical thickness, well below the visual threshold for
-# any of these layers. Drops ~70% of cells (clean-air ocean, polar regions).
-MIN_AOD_THRESHOLD = 0.01
+# be dropped. 0.05 ≈ 5% optical thickness, the lower bound of visually-relevant
+# aerosol on the published color scales (NASA Worldview / Windy Pro both treat
+# AOD < 0.05 as "clean air" and render no color).
+MIN_AOD_THRESHOLD = 0.05
 
-# Output resolution: ADS pre-interpolates to 0.4° regular lat/lon. We can
-# downsample further to reduce frontend payload size.
-DOWNSAMPLE_FACTOR = 1   # 1 = native 0.4°, 2 = 0.8°, 4 = 1.6°.
+# Output resolution: ADS pre-interpolates to 0.4° regular lat/lon. We
+# downsample 2× to 0.8° because DEEPWatch is a global dashboard — sub-0.4°
+# detail isn't legible at globe-scale anyway, and 2× downsampling cuts the
+# JSON ~4× without visible loss.
+DOWNSAMPLE_FACTOR = 2
 
 REPO_ROOT = pathlib.Path(__file__).parent
 DATA_DIR = REPO_ROOT / "data"
